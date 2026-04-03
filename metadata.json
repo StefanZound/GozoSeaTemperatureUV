@@ -1,0 +1,7 @@
+{
+  "name": "Gozo Sea Temp & UV",
+  "description": "Real-time sea temperature and UV index tracker for Gozo and beyond, featuring safe sun time calculations and swimmer advisories.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}
