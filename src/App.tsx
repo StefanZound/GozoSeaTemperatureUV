@@ -121,8 +121,8 @@ export default function App() {
     const windows = daylightHours.filter(h => calculateSafeMinutes(h.uv, 0) >= 60);
     if (windows.length === 0) return "No 1-hour safe window today.";
     
-    const start = format(windows[0].time, "h aa");
-    const end = format(windows[windows.length - 1].time, "h aa");
+    const start = format(windows[0].time, "haa");
+    const end = format(windows[windows.length - 1].time, "haa");
     return `Safe for 1 hour without sunblock from ${start} to ${end}.`;
   }, [weather, daylightHours]);
 
@@ -142,8 +142,8 @@ export default function App() {
     for (let i = 1; i <= safeSlots.length; i++) {
       const curr = safeSlots[i]?.time;
       if (!curr || (curr.getTime() - prev.getTime()) > 3600000) {
-        const startStr = format(start, "h aa");
-        const endStr = format(prev, "h aa");
+        const startStr = format(start, "haa");
+        const endStr = format(prev, "haa");
         ranges.push(startStr === endStr ? startStr : `${startStr} - ${endStr}`);
         if (curr) start = curr;
       }
@@ -160,7 +160,7 @@ export default function App() {
         <div className="max-w-4xl mx-auto">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
-              <h1 className="text-3xl font-display font-bold tracking-tight">Gozo Sea Temp & UV</h1>
+              <h1 className="text-3xl font-display font-bold tracking-tight">{location.name} Sea Temp & UV</h1>
               <p className="text-sea-accent/80 text-sm mt-1 flex items-center gap-1">
                 <MapPin size={14} /> {location.name}, {location.admin1 || location.country}
               </p>
@@ -208,7 +208,7 @@ export default function App() {
                       {convertTemp(marine.current.sea_surface_temperature)}
                     </div>
                     <p className="text-slate-400 text-xs mb-4">
-                      Updated today @ {formatInTimeZone(parseISO(marine.current.time), location.timezone, "h aa")}
+                      Updated today @ {formatInTimeZone(parseISO(marine.current.time), location.timezone, "haa")}
                     </p>
                     <div className="bg-slate-50 rounded-2xl p-4 w-full">
                       <p className="text-slate-600 font-medium text-sm leading-relaxed italic">
@@ -236,7 +236,7 @@ export default function App() {
                   <div className="space-y-6">
                     <div className="flex items-end gap-4">
                       <div className="text-7xl font-display font-bold text-orange-500">
-                        {weather.hourly.uv_index[currentHourIndex]}
+                        {Math.round(weather.hourly.uv_index[currentHourIndex])}
                       </div>
                       <div className="pb-2">
                         <span className="bg-orange-100 text-orange-700 px-3 py-1 rounded-full text-sm font-bold">
@@ -264,7 +264,7 @@ export default function App() {
                         <div>
                           <p className="text-xs text-slate-400">Daylight</p>
                           <p className="font-bold text-slate-700">
-                            {formatInTimeZone(parseISO(weather.daily.sunrise[0]), location.timezone, "h:mm aa")} - {formatInTimeZone(parseISO(weather.daily.sunset[0]), location.timezone, "h:mm aa")}
+                            {formatInTimeZone(parseISO(weather.daily.sunrise[0]), location.timezone, "haa")} - {formatInTimeZone(parseISO(weather.daily.sunset[0]), location.timezone, "haa")}
                           </p>
                         </div>
                       </div>
@@ -321,7 +321,7 @@ export default function App() {
                           <td className="px-6 py-4">
                             <div className="flex items-center gap-2">
                               <span className={cn("font-mono text-sm", isCurrent ? "text-sea-deep font-bold" : "text-slate-600")}>
-                                {format(h.time, "h:00 aa")}
+                                {format(h.time, "haa")}
                               </span>
                               {isCurrent && <span className="text-[10px] bg-sea-deep text-white px-1.5 py-0.5 rounded uppercase font-bold">Now</span>}
                             </div>
@@ -330,7 +330,7 @@ export default function App() {
                             <span className={cn("font-display font-bold text-lg", 
                               h.uv > 7 ? "text-red-500" : h.uv > 5 ? "text-orange-500" : h.uv > 2 ? "text-amber-500" : "text-emerald-500"
                             )}>
-                              {h.uv}
+                              {Math.round(h.uv)}
                             </span>
                           </td>
                           <td className="px-6 py-4">
